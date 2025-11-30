@@ -132,6 +132,10 @@ COPY --from=builder /opt/vbt /opt/vbt
 RUN cp /opt/vbt/lib/libhts.so.3 /lib/x86_64-linux-gnu
 ENV PATH=/opt/vbt:$PATH
 
+RUN wget https://github.com/arq5x/bedtools2/releases/download/v2.31.0/bedtools.static -O bedtools && \
+    chmod +x bedtools && \
+    mv bedtools /usr/local/sbin/
+
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV FC_LANG=en-US
 ENV LC_CTYPE=en_US.UTF-8
