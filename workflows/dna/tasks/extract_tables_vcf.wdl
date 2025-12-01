@@ -3,7 +3,7 @@ task extract_tables_vcf {
 	String project
 
 	command <<<
-		python /opt/quartet/workflows/dna_wgs/codescripts/extract_tables.py -hap ${hap} -project ${project}
+		python /opt/quartet/workflows/dna/codescripts/extract_tables.py -hap ${hap} -project ${project}
 	>>>
 
 	output {

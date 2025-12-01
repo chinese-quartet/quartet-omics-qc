@@ -13,7 +13,7 @@
   "REPLACE_SENTIEON_DOCKER": "registry.cn-shanghai.aliyuncs.com/pgx-docker-registry/sentieon-replaced:2.0",
   "DEEPVARIANT_DOCKER": "registry.cn-shanghai.aliyuncs.com/pgx-docker-registry/deepvariant:v1.5.0_20230721",
   "QUALIMAPdocker": "registry.cn-shanghai.aliyuncs.com/pgx-docker-registry/qualimap:2.0.0",
-  "benchmark_region": "oss://pgx-result/renluyao/manuscript_v3.0/reference_datasets_v202103/Quartet.high.confidence.region.v202103.bed",
+  "benchmark_region": "Quartet.high.confidence.region.v202103.bed",
   "ref_dir": "oss://pgx-reference-data/GRCh38.d1.vd1/",
   "fasta": "GRCh38.d1.vd1.fa",
   "dbmills_dir": "oss://pgx-reference-data/GRCh38.d1.vd1/",
@@ -22,6 +22,5 @@
   "dbsnp": "dbsnp_146.hg38.vcf",
   "MENDELIANdocker": "registry-vpc.cn-shanghai.aliyuncs.com/pgx-docker-registry/vbt:v1.1",
   "DIYdocker": "registry-vpc.cn-shanghai.aliyuncs.com/pgx-docker-registry/high_confidence_call_manuscript:v1.4",
-  "pl": "ILLUMINA",
-  "report_name": "Quartet_DNA_Report.docx"
+  "pl": "ILLUMINA"
 }

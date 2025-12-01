@@ -1,74 +1,28 @@
-import "./tasks/rename_fastq.wdl" as rename_fastq
 import "./tasks/rename_vcf.wdl" as rename_vcf
-import "./tasks/mapping.wdl" as mapping
-import "./tasks/Dedup.wdl" as Dedup
-import "./tasks/qualimap.wdl" as qualimap
-import "./tasks/deduped_Metrics.wdl" as deduped_Metrics
-import "./tasks/sentieon.wdl" as sentieon
-import "./tasks/Realigner.wdl" as Realigner
-import "./tasks/BQSR.wdl" as BQSR
-import "./tasks/Haplotyper.wdl" as Haplotyper
 import "./tasks/benchmark.wdl" as benchmark
-import "./tasks/multiqc.wdl" as multiqc
 import "./tasks/multiqc_hap.wdl" as multiqc_hap
-import "./tasks/merge_sentieon_metrics.wdl" as merge_sentieon_metrics
-import "./tasks/extract_tables.wdl" as extract_tables
 import "./tasks/extract_tables_vcf.wdl" as extract_tables_vcf
 import "./tasks/mendelian.wdl" as mendelian
 import "./tasks/merge_mendelian.wdl" as merge_mendelian
-import "./tasks/quartet_mendelian.wdl" as quartet_mendelian
-import "./tasks/fastqc.wdl" as fastqc
-import "./tasks/fastqscreen.wdl" as fastqscreen
 import "./tasks/merge_family.wdl" as merge_family
 import "./tasks/filter_vcf.wdl" as filter_vcf
 import "./tasks/generate_qc_report.wdl" as generate_qc_report
 
 workflow {{ project_name }} {
-	File? fastq_1_D5
-	File? fastq_1_D6
-	File? fastq_1_F7
-	File? fastq_1_M8
-
-	File? fastq_2_D5
-	File? fastq_2_D6
-	File? fastq_2_F7
-	File? fastq_2_M8
-
 	File? vcf_D5
 	File? vcf_D6
 	File? vcf_F7
 	File? vcf_M8
+	File? bed
 
-	String REPLACE_SENTIEON_DOCKER
-	String DEEPVARIANT_DOCKER
-	String FASTQCdocker
-	String FASTQSCREENdocker
-	String QUALIMAPdocker
-	String BENCHMARKdocker
-	String MENDELIANdocker
-	String DIYdocker
-	String MULTIQCdocker
-	String BEDTOOLSdocker
-
-	String fasta
-	File dbmills_dir
-	String db_mills
-	File dbsnp_dir
-	String dbsnp
-	String pl
-
-	File screen_ref_dir
-	File fastq_screen_conf
 	String benchmarking_dir
+	String benchmark_region
 	String ref_dir
+	String fasta
+
 	String output_dir
 	String report_name
-
 	String project
-
-	String disk_size
-	String BIGcluster_config
-	String SMALLcluster_config
 
 	# Fastq is null, check if starts with vcf
 	if (vcf_D5 != "") {
@@ -81,12 +35,18 @@ workflow {{ project_name }} {
 		call filter_vcf.filter_vcf as filter_vcf_D5_vcf {
 			input:
 			vcf=rename_vcf_D5_vcf.vcf_renamed,
+			bed=bed,
+			benchmarking_dir=benchmarking_dir,
+			benchmark_region=benchmark_region,
 		}
 		call benchmark.benchmark as benchmark_D5_vcf {
 			input:
 			filtered_vcf=filter_vcf_D5_vcf.filtered_vcf,
+			bed=filter_vcf_D5_vcf.filtered_bed,
 			benchmarking_dir=benchmarking_dir,
+			benchmark_region=benchmark_region,
 			ref_dir=ref_dir,
+			fasta=fasta,
 			type="D5",
 		}
 	}
@@ -99,13 +59,19 @@ workflow {{ project_name }} {
 		}
 		call filter_vcf.filter_vcf as filter_vcf_D6_vcf {
 			input:
-			vcf=rename_vcf_D6_vcf.vcf_renamed,		
+			vcf=rename_vcf_D6_vcf.vcf_renamed,
+			bed=bed,
+			benchmarking_dir=benchmarking_dir,
+			benchmark_region=benchmark_region,
 		}
 		call benchmark.benchmark as benchmark_D6_vcf {
 			input:
 			filtered_vcf=filter_vcf_D6_vcf.filtered_vcf,
+			bed=filter_vcf_D6_vcf.filtered_bed,
 			benchmarking_dir=benchmarking_dir,
+			benchmark_region=benchmark_region,
 			ref_dir=ref_dir,
+			fasta=fasta,
 			type="D6",
 		}
 	}
@@ -118,13 +84,19 @@ workflow {{ project_name }} {
 		}
 		call filter_vcf.filter_vcf as filter_vcf_F7_vcf {
 			input:
-			vcf=rename_vcf_F7_vcf.vcf_renamed,	
+			vcf=rename_vcf_F7_vcf.vcf_renamed,
+			bed=bed,
+			benchmarking_dir=benchmarking_dir,
+			benchmark_region=benchmark_region,
 		}
 		call benchmark.benchmark as benchmark_F7_vcf {
 			input:
 			filtered_vcf=filter_vcf_F7_vcf.filtered_vcf,
+			bed=filter_vcf_F7_vcf.filtered_bed,
 			benchmarking_dir=benchmarking_dir,
+			benchmark_region=benchmark_region,
 			ref_dir=ref_dir,
+			fasta=fasta,
 			type="F7"
 		}
 	}
@@ -137,13 +109,19 @@ workflow {{ project_name }} {
 		}
 		call filter_vcf.filter_vcf as filter_vcf_M8_vcf {
 			input:
-			vcf=rename_vcf_M8_vcf.vcf_renamed,	
+			vcf=rename_vcf_M8_vcf.vcf_renamed,
+			bed=bed,
+			benchmarking_dir=benchmarking_dir,
+			benchmark_region=benchmark_region,
 		}
 		call benchmark.benchmark as benchmark_M8_vcf {
 			input:
 			filtered_vcf=filter_vcf_M8_vcf.filtered_vcf,
+			bed=filter_vcf_M8_vcf.filtered_bed,
 			benchmarking_dir=benchmarking_dir,
+			benchmark_region=benchmark_region,
 			ref_dir=ref_dir,
+			fasta=fasta,
 			type="M8"
 		}
 	}
@@ -180,7 +158,7 @@ workflow {{ project_name }} {
 			input:
 			family_vcf=merge_family_vcf.family_vcf,
 			ref_dir=ref_dir,
-			fasta="GRCh38.d1.vd1.fa",
+			fasta=fasta,
 		}
 
 		call merge_mendelian.merge_mendelian as merge_mendelian_vcf {

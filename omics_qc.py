@@ -48,10 +48,7 @@ def dna_vcf_workflow(vcf_d5, vcf_d6, vcf_f7, vcf_m8, bed_file, output_dir, refer
         raise Exception(
                 "The vcf files number should be 4 * x + δ(δ < 4)")
 
-    if bed_file:
-        wdl_dir = '/opt/quartet/workflows/dna_wes'
-    else:
-        wdl_dir = '/opt/quartet/workflows/dna_wgs'
+    wdl_dir = '/opt/quartet/workflows/dna'
 
     if not os.path.exists(wdl_dir):
         print("Cannot find the workflow, please contact the administrator.")

@@ -1,9 +1,13 @@
 task benchmark {
 	File filtered_vcf
+	File? bed
 	String benchmarking_dir
+	String benchmark_region
 	String ref_dir
+	String fasta
 	String type
 	String sample = basename(filtered_vcf,".filtered.vcf")
+	String region = select_first([bed, benchmarking_dir + "/" + benchmark_region])
 
 	command <<<
 		set -o pipefail
@@ -15,31 +19,31 @@ task benchmark {
 		echo -e "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tLCL7" > LCL7_name
 		echo -e "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tLCL8" > LCL8_name
 
-		export HGREF=${ref_dir}/GRCh38.d1.vd1.fa
+		export HGREF=${ref_dir}/${fasta}
 
 		if [[ ${type} == "D5" ]];then
-			hap.py ${benchmarking_dir}/LCL5.high.confidence.calls.vcf ${filtered_vcf} -f ${benchmarking_dir}/Quartet.high.confidence.region.v202103.bed --threads $nt -o ${sample} -r ${ref_dir}/GRCh38.d1.vd1.fa
+			hap.py ${benchmarking_dir}/LCL5.high.confidence.calls.vcf ${filtered_vcf} -f ${region} --threads $nt -o ${sample} -r ${ref_dir}/${fasta}
 			cat ${filtered_vcf} | grep '##' > header
 			cat ${filtered_vcf} | grep -v '#' > body
 			cat header LCL5_name body > LCL5.vcf
 			rtg bgzip LCL5.vcf -c > ${sample}.reformed.vcf.gz
 			rtg index -f vcf ${sample}.reformed.vcf.gz
 		elif [[ ${type} == "D6" ]]; then
-		    hap.py ${benchmarking_dir}/LCL6.high.confidence.calls.vcf ${filtered_vcf} -f ${benchmarking_dir}/Quartet.high.confidence.region.v202103.bed --threads $nt -o ${sample} -r ${ref_dir}/GRCh38.d1.vd1.fa
+		    hap.py ${benchmarking_dir}/LCL6.high.confidence.calls.vcf ${filtered_vcf} -f ${region} --threads $nt -o ${sample} -r ${ref_dir}/${fasta}
 			cat ${filtered_vcf} | grep '##' > header
 			cat ${filtered_vcf} | grep -v '#' > body
 			cat header LCL6_name body > LCL6.vcf
 			rtg bgzip LCL6.vcf -c > ${sample}.reformed.vcf.gz
 			rtg index -f vcf ${sample}.reformed.vcf.gz
 	    elif [[ ${type} == "F7" ]]; then
-	        hap.py ${benchmarking_dir}/LCL7.high.confidence.calls.vcf ${filtered_vcf} -f ${benchmarking_dir}/Quartet.high.confidence.region.v202103.bed --threads $nt -o ${sample} -r ${ref_dir}/GRCh38.d1.vd1.fa
+	        hap.py ${benchmarking_dir}/LCL7.high.confidence.calls.vcf ${filtered_vcf} -f ${region} --threads $nt -o ${sample} -r ${ref_dir}/${fasta}
 			cat ${filtered_vcf} | grep '##' > header
 			cat ${filtered_vcf} | grep -v '#' > body
 			cat header LCL7_name body > LCL7.vcf
 			rtg bgzip LCL7.vcf -c > ${sample}.reformed.vcf.gz
 			rtg index -f vcf ${sample}.reformed.vcf.gz
 		elif [[ ${type} == "M8" ]]; then
-			hap.py ${benchmarking_dir}/LCL8.high.confidence.calls.vcf ${filtered_vcf} -f ${benchmarking_dir}/Quartet.high.confidence.region.v202103.bed --threads $nt -o ${sample} -r ${ref_dir}/GRCh38.d1.vd1.fa
+			hap.py ${benchmarking_dir}/LCL8.high.confidence.calls.vcf ${filtered_vcf} -f ${region} --threads $nt -o ${sample} -r ${ref_dir}/${fasta}
 			cat ${filtered_vcf} | grep '##' > header
 			cat ${filtered_vcf} | grep -v '#' > body
 			cat header LCL8_name body > LCL8.vcf
