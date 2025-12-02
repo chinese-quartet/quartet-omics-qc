@@ -183,11 +183,12 @@ RUN R -e "remotes::install_github('vangork/Quartet-Metabolism-QC-Report/metqc', 
 
 RUN apt-get install -y python3.8 python3.8-venv
 RUN python3.8 -m venv venv && \
-    /opt/venv/bin/pip install multiqc==1.9 && \
-    /opt/venv/bin/pip install git+https://github.com/yjcyxky/biominer-app-util.git
+    /opt/venv/bin/pip install multiqc==1.9
 
 RUN mkdir quartet
 COPY workflows /opt/quartet/workflows
-COPY reporting /opt/quartet/reporting
+RUN cd /opt/quartet/workflows/dna/ && \
+    zip -r tasks.zip tasks/
+COPY scripts /opt/quartet/scripts
 COPY omics_qc.py /opt/quartet/omics_qc.py
 ENTRYPOINT ["/opt/quartet/omics_qc.py"]

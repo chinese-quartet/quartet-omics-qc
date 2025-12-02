@@ -5,6 +5,6 @@
 	String report_name
 
 	command <<<
-		Rscript /opt/quartet/reporting/dna_qc_report.R ${variant_qc} ${mendelian_qc} ${output_dir} ${report_name}
+		Rscript /opt/quartet/scripts/dna_qc_report.R ${variant_qc} ${mendelian_qc} ${output_dir} ${report_name}
 	>>>
 }

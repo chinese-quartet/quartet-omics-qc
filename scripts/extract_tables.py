@@ -5,7 +5,6 @@ import sys, argparse, os
 
 parser = argparse.ArgumentParser(description="This script is to get information from multiqc and sentieon, output the raw fastq, bam and variants calling (precision and recall) quality metrics")
 
-
 parser.add_argument('-quality', '--quality_yield', type=str, help='*.quality_yield.txt')
 parser.add_argument('-depth', '--wgs_metrics', type=str, help='*deduped_WgsMetricsAlgo.txt')
 parser.add_argument('-aln', '--aln_metrics', type=str, help='*_deduped_aln_metrics.txt')

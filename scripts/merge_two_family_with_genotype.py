@@ -12,7 +12,6 @@ parser.add_argument('-LCL6', '--LCL6', type=str, help='LCL6 family info',  requi
 parser.add_argument('-genotype', '--genotype', type=str, help='Genotype information of a set of four family members',  required=True)
 parser.add_argument('-family', '--family', type=str, help='family name',  required=True)
 
-
 args = parser.parse_args()
 lcl5 = args.LCL5
 lcl6 = args.LCL6

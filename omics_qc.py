@@ -1,11 +1,11 @@
 #!/opt/venv/bin/python
 
+import click
+import json
 import os
 import re
-import json
-import click
+import shutil
 import threading
-from biominer_app_util.cli import render_app
 from subprocess import Popen, PIPE
 
 
@@ -48,54 +48,57 @@ def dna_vcf_workflow(vcf_d5, vcf_d6, vcf_f7, vcf_m8, bed_file, output_dir, refer
         raise Exception(
                 "The vcf files number should be 4 * x + δ(δ < 4)")
 
-    wdl_dir = '/opt/quartet/workflows/dna'
-
-    if not os.path.exists(wdl_dir):
-        print("Cannot find the workflow, please contact the administrator.")
+    workflow_file = "/opt/quartet/workflows/dna/workflow.wdl"
+    ## tasks.zip is the zipped tarball of tasks folder and will be auto generated in dockerfile
+    tasks_tarball = "/opt/quartet/workflows/dna/tasks.zip"
     
-    def call_cromwell(inputs_fpath, workflow_fpath, tasks_path, workflow_root):
+    def call_cromwell(inputs_file, workflow_file, tasks_file, workflow_root):
         executions_dir = os.path.join(workflow_root, "cromwell-executions")
         logs_dir = os.path.join(workflow_root, "cromwell-workflow-logs")
         executions_dir_option = '-Dbackend.providers.Local.config.root=' + executions_dir
         logs_dir_option = '-Dworkflow-options.workflow-log-dir=' + logs_dir
         cmd = ['java', '-Dconfig.file=/opt/cromwell/cromwell-local.conf', executions_dir_option, logs_dir_option,
-               '-jar', '/opt/cromwell/cromwell.jar', 'run', workflow_fpath, "-i", inputs_fpath,
-               "-p", tasks_path, "--workflow-root", workflow_root]
+               '-jar', '/opt/cromwell/cromwell.jar', 'run', workflow_file, "-i", inputs_file,
+               "-p", tasks_file, "--workflow-root", workflow_root]
         proc = Popen(cmd, stdin=PIPE)
         proc.communicate()
 
     threads = []
+    project_name = "dseqc"
+    output_workflow_dir = os.path.join(output_dir, "cromwell-workflows", project_name)
+    os.makedirs(output_workflow_dir, exist_ok=True)
 
     for i in range(max_len):
-        project_name = "dseqc_" + str(i)
         report_name = "Quartet_DNA_Report_" + str(i) + ".docx"
 
         data_dict = {
-            "project_name": project_name,
+            "project": project_name,
             "benchmarking_dir": os.path.join(reference_data_dir, "reference_datasets_v202103"),
+            "benchmark_region": "Quartet.high.confidence.region.v202103.bed",
             "ref_dir": os.path.join(reference_data_dir, "GRCh38.d1.vd1"),
+            "fasta": "GRCh38.d1.vd1.fa",
             "output_dir": output_dir,
             "report_name": report_name,
-            "vcf_D5": vcf_d5[i] if len(vcf_d5) > i else "",
-            "vcf_D6": vcf_d6[i] if len(vcf_d6) > i else "",
-            "vcf_F7": vcf_f7[i] if len(vcf_f7) > i else "",
-            "vcf_M8": vcf_m8[i] if len(vcf_m8) > i else "",
         }
-
+        if len(vcf_d5) > i:
+            data_dict["vcf_D5"] = vcf_d5[i]
+        if len(vcf_d6) > i:
+            data_dict["vcf_D6"] = vcf_d6[i]
+        if len(vcf_f7) > i:
+            data_dict["vcf_F7"] = vcf_f7[i]
+        if len(vcf_m8) > i:
+            data_dict["vcf_M8"] = vcf_m8[i]
         if bed_file:
             data_dict["bed"] = bed_file
 
-        # TODO: create multiple inputs instead
-        output_workflow_dir = os.path.join(output_dir, "cromwell-workflows", project_name)
-        os.makedirs(output_workflow_dir, exist_ok=True)
-        render_app(wdl_dir, output_dir=output_workflow_dir,
-            project_name=project_name, sample=data_dict)
+        input_dict = {}
+        for key, value in data_dict.items():
+            input_dict[project_name + "." + key] = value
+        inputs_file = os.path.join(output_workflow_dir, "inputs_" + str(i))
+        with open(inputs_file, 'w') as fp:
+            json.dump(input_dict, fp, indent=4)
 
-        inputs_fpath = os.path.join(output_workflow_dir, "inputs")
-        workflow_fpath = os.path.join(output_workflow_dir, "workflow.wdl")
-        tasks_path = os.path.join(output_workflow_dir, "tasks.zip")
-
-        thread = threading.Thread(target=call_cromwell, args=(inputs_fpath, workflow_fpath, tasks_path, output_dir))
+        thread = threading.Thread(target=call_cromwell, args=(inputs_file, workflow_file, tasks_tarball, output_dir))
         thread.daemon = True
         thread.start()
         threads.append(thread)
@@ -121,7 +124,7 @@ def dna_vcf_workflow(vcf_d5, vcf_d6, vcf_f7, vcf_m8, bed_file, output_dir, refer
               help="The output directory.")
 def rna_qc_report(exp_file, count_file, phenotype_file, output_dir):
     report_name = "Quartet_RNA_Report.docx"
-    cmd = ['Rscript', '/opt/quartet/reporting/rna_qc_report.R', phenotype_file, exp_file,
+    cmd = ['Rscript', '/opt/quartet/scripts/rna_qc_report.R', phenotype_file, exp_file,
             count_file, output_dir, report_name]
     print(cmd)
     proc = Popen(cmd, stdin=PIPE)
@@ -141,7 +144,7 @@ def rna_qc_report(exp_file, count_file, phenotype_file, output_dir):
               help="The output directory.")
 def protein_qc_report(exp_file, meta_file, output_dir):
     report_name = "Quartet_Protein_Report.docx"
-    cmd = ['Rscript', '/opt/quartet/reporting/protein_qc_report.R', exp_file, meta_file,
+    cmd = ['Rscript', '/opt/quartet/scripts/protein_qc_report.R', exp_file, meta_file,
             output_dir, report_name]
     proc = Popen(cmd, stdin=PIPE)
     proc.communicate()
@@ -160,7 +163,7 @@ def protein_qc_report(exp_file, meta_file, output_dir):
               help="The output directory.")
 def metabolism_qc_report(exp_file, meta_file, output_dir):
     report_name = "Quartet_Metabolism_Report.docx"
-    cmd = ['Rscript', '/opt/quartet/reporting/metabolism_qc_report.R', exp_file, meta_file,
+    cmd = ['Rscript', '/opt/quartet/scripts/metabolism_qc_report.R', exp_file, meta_file,
             output_dir, report_name]
     proc = Popen(cmd, stdin=PIPE)
     proc.communicate()

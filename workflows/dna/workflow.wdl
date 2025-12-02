@@ -1,20 +1,22 @@
-import "./tasks/rename_vcf.wdl" as rename_vcf
 import "./tasks/benchmark.wdl" as benchmark
-import "./tasks/multiqc_hap.wdl" as multiqc_hap
 import "./tasks/extract_tables_vcf.wdl" as extract_tables_vcf
-import "./tasks/mendelian.wdl" as mendelian
-import "./tasks/merge_mendelian.wdl" as merge_mendelian
-import "./tasks/merge_family.wdl" as merge_family
 import "./tasks/filter_vcf.wdl" as filter_vcf
 import "./tasks/generate_qc_report.wdl" as generate_qc_report
+import "./tasks/merge_family.wdl" as merge_family
+import "./tasks/merge_mendelian.wdl" as merge_mendelian
+import "./tasks/mendelian.wdl" as mendelian
+import "./tasks/multiqc_hap.wdl" as multiqc_hap
+import "./tasks/rename_vcf.wdl" as rename_vcf
 
-workflow {{ project_name }} {
+workflow dseqc {
 	File? vcf_D5
 	File? vcf_D6
 	File? vcf_F7
 	File? vcf_M8
 	File? bed
 
+	# TODO: seems that File for folder would cause folder copy inside of docker
+	# 	so use String instead until symbol link is supported for 
 	String benchmarking_dir
 	String benchmark_region
 	String ref_dir
@@ -25,7 +27,7 @@ workflow {{ project_name }} {
 	String project
 
 	# Fastq is null, check if starts with vcf
-	if (vcf_D5 != "") {
+	if (defined(vcf_D5)) {
 		call rename_vcf.rename_vcf as rename_vcf_D5_vcf{
 			input:
 			project=project,
@@ -50,7 +52,7 @@ workflow {{ project_name }} {
 			type="D5",
 		}
 	}
-	if (vcf_D6 != "") {
+	if (defined(vcf_D6)) {
 		call rename_vcf.rename_vcf as rename_vcf_D6_vcf{
 			input:
 			project=project,
@@ -75,7 +77,7 @@ workflow {{ project_name }} {
 			type="D6",
 		}
 	}
-	if (vcf_F7 != "") {
+	if (defined(vcf_F7)) {
 		call rename_vcf.rename_vcf as rename_vcf_F7_vcf{
 			input:
 			project=project,
@@ -100,7 +102,7 @@ workflow {{ project_name }} {
 			type="F7"
 		}
 	}
-	if (vcf_M8 != "") {
+	if (defined(vcf_M8)) {
 		call rename_vcf.rename_vcf as rename_vcf_M8_vcf{
 			input:
 			project=project,
@@ -140,7 +142,7 @@ workflow {{ project_name }} {
 		project=project,
 	}
 
-	if (vcf_D5 != "" && vcf_D6 != "" && vcf_F7 != "" && vcf_M8 != "") {
+	if (defined(vcf_D5) && defined(vcf_D6) && defined(vcf_F7) && defined(vcf_M8)) {
 		call merge_family.merge_family as merge_family_vcf {
 			input:
 			D5_vcf=benchmark_D5_vcf.rtg_vcf,
