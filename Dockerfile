@@ -179,7 +179,7 @@ RUN R -e "remotes::install_github('vangork/Quartet-RNA-QC-report/exp2qcdt', ref=
 
 RUN R -e "remotes::install_github('vangork/Quartet-Protein-QC/protqc', ref='dev')"
 
-RUN R -e "remotes::install_github('chinese-quartet/Quartet-Metabolism-QC-Report/metqc')"
+RUN R -e "remotes::install_github('vangork/Quartet-Metabolism-QC-Report/metqc', ref='dev')"
 
 RUN apt-get install -y python3.8 python3.8-venv
 RUN python3.8 -m venv venv && \
