@@ -15,8 +15,8 @@ workflow dseqc {
 	File? vcf_M8
 	File? bed
 
-	# TODO: seems that File for folder would cause folder copy inside of docker
-	# 	so use String instead until symbol link is supported for 
+	# TODO: seems that using File for folder would copy the folder inside of docker
+	# 	so use String instead until symbol link is supported
 	String benchmarking_dir
 	String benchmark_region
 	String ref_dir
