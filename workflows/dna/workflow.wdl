@@ -22,7 +22,7 @@ workflow dseqc {
 	File quartet_hc_region
 	# TODO: if declare as File instead of String, it would report error:
 	#	Error: "Fasta file GRCh38.d1.vd1.fa is not indexed"
-	String grc_ref_file
+	String grc_ref_fa
 
 	String output_dir
 	String report_name
@@ -51,7 +51,7 @@ workflow dseqc {
 			quartet_f7_hc_vcf=quartet_f7_hc_vcf,
 			quartet_m8_hc_vcf=quartet_m8_hc_vcf,
 			quartet_hc_region=quartet_hc_region,
-			grc_ref_file=grc_ref_file,
+			grc_ref_fa=grc_ref_fa,
 			type="D5",
 		}
 	}
@@ -77,7 +77,7 @@ workflow dseqc {
 			quartet_f7_hc_vcf=quartet_f7_hc_vcf,
 			quartet_m8_hc_vcf=quartet_m8_hc_vcf,
 			quartet_hc_region=quartet_hc_region,
-			grc_ref_file=grc_ref_file,
+			grc_ref_fa=grc_ref_fa,
 			type="D6",
 		}
 	}
@@ -103,7 +103,7 @@ workflow dseqc {
 			quartet_f7_hc_vcf=quartet_f7_hc_vcf,
 			quartet_m8_hc_vcf=quartet_m8_hc_vcf,
 			quartet_hc_region=quartet_hc_region,
-			grc_ref_file=grc_ref_file,
+			grc_ref_fa=grc_ref_fa,
 			type="F7"
 		}
 	}
@@ -129,7 +129,7 @@ workflow dseqc {
 			quartet_f7_hc_vcf=quartet_f7_hc_vcf,
 			quartet_m8_hc_vcf=quartet_m8_hc_vcf,
 			quartet_hc_region=quartet_hc_region,
-			grc_ref_file=grc_ref_file,
+			grc_ref_fa=grc_ref_fa,
 			type="M8"
 		}
 	}
@@ -165,7 +165,7 @@ workflow dseqc {
 		call mendelian.mendelian as mendelian_vcf {
 			input:
 			family_vcf=merge_family_vcf.family_vcf,
-			grc_ref_file=grc_ref_file,
+			grc_ref_fa=grc_ref_fa,
 		}
 
 		call merge_mendelian.merge_mendelian as merge_mendelian_vcf {

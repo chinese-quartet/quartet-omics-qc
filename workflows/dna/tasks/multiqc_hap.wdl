@@ -8,7 +8,7 @@ task multiqc_hap {
 		mkdir -p benchmark
 		cp ${sep=" " summary} benchmark/
 		/opt/venv/bin/multiqc benchmark/
-		ln -sf multiqc_data/multiqc_happy_data.json > multiqc_happy_data.json
+		ln -sf multiqc_data/multiqc_happy_data.json multiqc_happy_data.json
 	>>>
 
 	output {

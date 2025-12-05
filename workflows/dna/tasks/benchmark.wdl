@@ -8,7 +8,7 @@ task benchmark {
 	File quartet_f7_hc_vcf
 	File quartet_m8_hc_vcf
 	File quartet_hc_region
-	String grc_ref_file
+	String grc_ref_fa
 
 	String sample = basename(filtered_vcf, ".filtered.vcf")
 	String region = select_first([bed, quartet_hc_region])
@@ -23,31 +23,31 @@ task benchmark {
 		echo -e "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tLCL7" > LCL7_name
 		echo -e "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tLCL8" > LCL8_name
 
-		export HGREF=${grc_ref_file}
+		export HGREF=${grc_ref_fa}
 
 		if [[ ${type} == "D5" ]];then
-			hap.py ${quartet_d5_hc_vcf} ${filtered_vcf} -f ${region} --threads $nt -o ${sample} -r ${grc_ref_file}
+			hap.py ${quartet_d5_hc_vcf} ${filtered_vcf} -f ${region} --threads $nt -o ${sample} -r ${grc_ref_fa}
 			cat ${filtered_vcf} | grep '##' > header
 			cat ${filtered_vcf} | grep -v '#' > body
 			cat header LCL5_name body > LCL5.vcf
 			rtg bgzip LCL5.vcf -c > ${sample}.reformed.vcf.gz
 			rtg index -f vcf ${sample}.reformed.vcf.gz
 		elif [[ ${type} == "D6" ]]; then
-		    hap.py ${quartet_d6_hc_vcf} ${filtered_vcf} -f ${region} --threads $nt -o ${sample} -r ${grc_ref_file}
+		    hap.py ${quartet_d6_hc_vcf} ${filtered_vcf} -f ${region} --threads $nt -o ${sample} -r ${grc_ref_fa}
 			cat ${filtered_vcf} | grep '##' > header
 			cat ${filtered_vcf} | grep -v '#' > body
 			cat header LCL6_name body > LCL6.vcf
 			rtg bgzip LCL6.vcf -c > ${sample}.reformed.vcf.gz
 			rtg index -f vcf ${sample}.reformed.vcf.gz
 	    elif [[ ${type} == "F7" ]]; then
-	        hap.py ${quartet_f7_hc_vcf} ${filtered_vcf} -f ${region} --threads $nt -o ${sample} -r ${grc_ref_file}
+	        hap.py ${quartet_f7_hc_vcf} ${filtered_vcf} -f ${region} --threads $nt -o ${sample} -r ${grc_ref_fa}
 			cat ${filtered_vcf} | grep '##' > header
 			cat ${filtered_vcf} | grep -v '#' > body
 			cat header LCL7_name body > LCL7.vcf
 			rtg bgzip LCL7.vcf -c > ${sample}.reformed.vcf.gz
 			rtg index -f vcf ${sample}.reformed.vcf.gz
 		elif [[ ${type} == "M8" ]]; then
-			hap.py ${quartet_m8_hc_vcf} ${filtered_vcf} -f ${region} --threads $nt -o ${sample} -r ${grc_ref_file}
+			hap.py ${quartet_m8_hc_vcf} ${filtered_vcf} -f ${region} --threads $nt -o ${sample} -r ${grc_ref_fa}
 			cat ${filtered_vcf} | grep '##' > header
 			cat ${filtered_vcf} | grep -v '#' > body
 			cat header LCL8_name body > LCL8.vcf
