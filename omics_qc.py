@@ -68,15 +68,25 @@ def dna_vcf_workflow(vcf_d5, vcf_d6, vcf_f7, vcf_m8, bed_file, output_dir, refer
     output_workflow_dir = os.path.join(output_dir, "cromwell-workflows", project_name)
     os.makedirs(output_workflow_dir, exist_ok=True)
 
+    quartet_ref_dir = os.path.join(reference_data_dir, "reference_datasets_v202103")
+    quartet_d5_hc_vcf = os.path.join(quartet_ref_dir, "LCL5.high.confidence.calls.vcf")
+    quartet_d6_hc_vcf = os.path.join(quartet_ref_dir, "LCL6.high.confidence.calls.vcf")
+    quartet_f7_hc_vcf = os.path.join(quartet_ref_dir, "LCL7.high.confidence.calls.vcf")
+    quartet_m8_hc_vcf = os.path.join(quartet_ref_dir, "LCL8.high.confidence.calls.vcf")
+    quartet_hc_region = os.path.join(quartet_ref_dir, "Quartet.high.confidence.region.v202103.bed")
+    grc_ref_file = os.path.join(reference_data_dir, "GRCh38.d1.vd1", "GRCh38.d1.vd1.fa")
+
     for i in range(max_len):
         report_name = "Quartet_DNA_Report_" + str(i) + ".docx"
 
         data_dict = {
             "project": project_name,
-            "benchmarking_dir": os.path.join(reference_data_dir, "reference_datasets_v202103"),
-            "benchmark_region": "Quartet.high.confidence.region.v202103.bed",
-            "ref_dir": os.path.join(reference_data_dir, "GRCh38.d1.vd1"),
-            "fasta": "GRCh38.d1.vd1.fa",
+            "quartet_d5_hc_vcf": quartet_d5_hc_vcf,
+            "quartet_d6_hc_vcf": quartet_d6_hc_vcf,
+            "quartet_f7_hc_vcf": quartet_f7_hc_vcf,
+            "quartet_m8_hc_vcf": quartet_m8_hc_vcf,
+            "quartet_hc_region": quartet_hc_region,
+            "grc_ref_file": grc_ref_file,
             "output_dir": output_dir,
             "report_name": report_name,
         }

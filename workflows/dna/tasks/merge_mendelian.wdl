@@ -2,7 +2,7 @@ task merge_mendelian {
 	File D5_trio_vcf
 	File D6_trio_vcf
 	File family_vcf
-	String family_name = basename(family_vcf,".family.vcf")
+	String family_name = basename(family_vcf, ".family.vcf")
 	
 	command <<<
 		cat ${D5_trio_vcf} | grep -v '##' > ${family_name}.D5.txt

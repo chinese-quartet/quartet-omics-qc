@@ -15,12 +15,14 @@ workflow dseqc {
 	File? vcf_M8
 	File? bed
 
-	# TODO: seems that using File for folder would copy the folder inside of docker
-	# 	so use String instead until symbol link is supported
-	String benchmarking_dir
-	String benchmark_region
-	String ref_dir
-	String fasta
+	File quartet_d5_hc_vcf
+	File quartet_d6_hc_vcf
+	File quartet_f7_hc_vcf
+	File quartet_m8_hc_vcf
+	File quartet_hc_region
+	# TODO: if declare as File instead of String, it would report error:
+	#	Error: "Fasta file GRCh38.d1.vd1.fa is not indexed"
+	String grc_ref_file
 
 	String output_dir
 	String report_name
@@ -38,17 +40,18 @@ workflow dseqc {
 			input:
 			vcf=rename_vcf_D5_vcf.vcf_renamed,
 			bed=bed,
-			benchmarking_dir=benchmarking_dir,
-			benchmark_region=benchmark_region,
+			quartet_hc_region=quartet_hc_region,
 		}
 		call benchmark.benchmark as benchmark_D5_vcf {
 			input:
 			filtered_vcf=filter_vcf_D5_vcf.filtered_vcf,
 			bed=filter_vcf_D5_vcf.filtered_bed,
-			benchmarking_dir=benchmarking_dir,
-			benchmark_region=benchmark_region,
-			ref_dir=ref_dir,
-			fasta=fasta,
+			quartet_d5_hc_vcf=quartet_d5_hc_vcf,
+			quartet_d6_hc_vcf=quartet_d6_hc_vcf,
+			quartet_f7_hc_vcf=quartet_f7_hc_vcf,
+			quartet_m8_hc_vcf=quartet_m8_hc_vcf,
+			quartet_hc_region=quartet_hc_region,
+			grc_ref_file=grc_ref_file,
 			type="D5",
 		}
 	}
@@ -63,17 +66,18 @@ workflow dseqc {
 			input:
 			vcf=rename_vcf_D6_vcf.vcf_renamed,
 			bed=bed,
-			benchmarking_dir=benchmarking_dir,
-			benchmark_region=benchmark_region,
+			quartet_hc_region=quartet_hc_region,
 		}
 		call benchmark.benchmark as benchmark_D6_vcf {
 			input:
 			filtered_vcf=filter_vcf_D6_vcf.filtered_vcf,
 			bed=filter_vcf_D6_vcf.filtered_bed,
-			benchmarking_dir=benchmarking_dir,
-			benchmark_region=benchmark_region,
-			ref_dir=ref_dir,
-			fasta=fasta,
+			quartet_d5_hc_vcf=quartet_d5_hc_vcf,
+			quartet_d6_hc_vcf=quartet_d6_hc_vcf,
+			quartet_f7_hc_vcf=quartet_f7_hc_vcf,
+			quartet_m8_hc_vcf=quartet_m8_hc_vcf,
+			quartet_hc_region=quartet_hc_region,
+			grc_ref_file=grc_ref_file,
 			type="D6",
 		}
 	}
@@ -88,17 +92,18 @@ workflow dseqc {
 			input:
 			vcf=rename_vcf_F7_vcf.vcf_renamed,
 			bed=bed,
-			benchmarking_dir=benchmarking_dir,
-			benchmark_region=benchmark_region,
+			quartet_hc_region=quartet_hc_region,
 		}
 		call benchmark.benchmark as benchmark_F7_vcf {
 			input:
 			filtered_vcf=filter_vcf_F7_vcf.filtered_vcf,
 			bed=filter_vcf_F7_vcf.filtered_bed,
-			benchmarking_dir=benchmarking_dir,
-			benchmark_region=benchmark_region,
-			ref_dir=ref_dir,
-			fasta=fasta,
+			quartet_d5_hc_vcf=quartet_d5_hc_vcf,
+			quartet_d6_hc_vcf=quartet_d6_hc_vcf,
+			quartet_f7_hc_vcf=quartet_f7_hc_vcf,
+			quartet_m8_hc_vcf=quartet_m8_hc_vcf,
+			quartet_hc_region=quartet_hc_region,
+			grc_ref_file=grc_ref_file,
 			type="F7"
 		}
 	}
@@ -113,17 +118,18 @@ workflow dseqc {
 			input:
 			vcf=rename_vcf_M8_vcf.vcf_renamed,
 			bed=bed,
-			benchmarking_dir=benchmarking_dir,
-			benchmark_region=benchmark_region,
+			quartet_hc_region=quartet_hc_region,
 		}
 		call benchmark.benchmark as benchmark_M8_vcf {
 			input:
 			filtered_vcf=filter_vcf_M8_vcf.filtered_vcf,
 			bed=filter_vcf_M8_vcf.filtered_bed,
-			benchmarking_dir=benchmarking_dir,
-			benchmark_region=benchmark_region,
-			ref_dir=ref_dir,
-			fasta=fasta,
+			quartet_d5_hc_vcf=quartet_d5_hc_vcf,
+			quartet_d6_hc_vcf=quartet_d6_hc_vcf,
+			quartet_f7_hc_vcf=quartet_f7_hc_vcf,
+			quartet_m8_hc_vcf=quartet_m8_hc_vcf,
+			quartet_hc_region=quartet_hc_region,
+			grc_ref_file=grc_ref_file,
 			type="M8"
 		}
 	}
@@ -159,8 +165,7 @@ workflow dseqc {
 		call mendelian.mendelian as mendelian_vcf {
 			input:
 			family_vcf=merge_family_vcf.family_vcf,
-			ref_dir=ref_dir,
-			fasta=fasta,
+			grc_ref_file=grc_ref_file,
 		}
 
 		call merge_mendelian.merge_mendelian as merge_mendelian_vcf {
