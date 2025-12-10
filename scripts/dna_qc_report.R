@@ -7,14 +7,14 @@ library(dnaseqc)
 args <- commandArgs(trailingOnly = TRUE)
 variant_qc <- args[1]
 mendelian_qc <- args[2]
-report_dir <- args[3]
-report_name <- args[4]
+type <- args[3]
+report_dir <- args[4]
+report_name <- args[5]
 
-## Enter the sequencing type, "WGS" or "WES", to calculate the DNAseq QC metrics.
-if(variant_qc == mendelian_qc) {
-  result <- dnaseqc(variant_qc_file = variant_qc, data_type = "WGS")
+if(variant_qc == "null") {
+  result <- dnaseqc(variant_qc_file = variant_qc, data_type = type)
 } else {
-  result <- dnaseqc(variant_qc_file = variant_qc, data_type = "WGS", mendelian_qc_file = mendelian_qc)
+  result <- dnaseqc(variant_qc_file = variant_qc, data_type = type, mendelian_qc_file = mendelian_qc)
 }
 
 ## Generate report

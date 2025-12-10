@@ -5,10 +5,11 @@ import sys, argparse, os
 
 parser = argparse.ArgumentParser(description="This script is to get information from multiqc and sentieon, output the raw fastq, bam and variants calling (precision and recall) quality metrics")
 
-parser.add_argument('-quality', '--quality_yield', type=str, help='*.quality_yield.txt')
-parser.add_argument('-depth', '--wgs_metrics', type=str, help='*deduped_WgsMetricsAlgo.txt')
+parser.add_argument('-quality', '--quality_yield_metrics', type=str, help='*_deduped_quality_yield_metrics.txt')
+parser.add_argument('-depth', '--wgs_metrics', type=str, help='*_deduped_wgs_metrics.txt')
 parser.add_argument('-aln', '--aln_metrics', type=str, help='*_deduped_aln_metrics.txt')
 parser.add_argument('-is', '--is_metrics', type=str, help='*_deduped_is_metrics.txt')
+parser.add_argument('-hs', '--hs_metrics', type=str, help='*_deduped_hs_metrics.txt')
 
 parser.add_argument('-fastqc', '--fastqc', type=str, help='multiqc_fastqc.txt')
 parser.add_argument('-fastqscreen', '--fastqscreen', type=str, help='multiqc_fastq_screen.txt')
@@ -18,12 +19,13 @@ parser.add_argument('-project', '--project_name', type=str, help='project_name')
 
 args = parser.parse_args()
 
-if args.quality_yield:
+if args.quality_yield_metrics:
 	# Rename input:
-	quality_yield_file = args.quality_yield
+	quality_yield_metrics_file = args.quality_yield_metrics
 	wgs_metrics_file = args.wgs_metrics
 	aln_metrics_file = args.aln_metrics
 	is_metrics_file = args.is_metrics
+	hs_metrics_file = args.hs_metrics
 	fastqc_file = args.fastqc
 	fastqscreen_file = args.fastqscreen
 	hap_file = args.happy
@@ -56,7 +58,7 @@ if args.quality_yield:
 	dat = pd.read_table(is_metrics_file,index_col=False)
 	is_metrics = dat[['Sample', 'MEDIAN_INSERT_SIZE']]
 	is_metrics['Sample'] = [x[-1] for x in is_metrics['Sample'].str.split('/')]
-	dat = pd.read_table(quality_yield_file,index_col=False)
+	dat = pd.read_table(quality_yield_metrics_file,index_col=False)
 	dat['%Q20'] = dat['Q20_BASES']/dat['TOTAL_BASES']
 	dat['%Q30'] = dat['Q30_BASES']/dat['TOTAL_BASES']
 	quality_yield = dat[['Sample','%Q20','%Q30']]
@@ -70,8 +72,12 @@ if args.quality_yield:
 	wgs_metrics['PCT_30X'] = wgs_metrics['PCT_30X'] * 100
 	wgs_metrics['Sample'] = [x[-1] for x in wgs_metrics['Sample'].str.split('/')]
 	data_frames = [aln_metrics, is_metrics, quality_yield, wgs_metrics]
+	if args.hs_metrics:
+		data_frames = [aln_metrics, is_metrics, quality_yield, wgs_metrics, hs_metrics]
 	post_alignment_dat = reduce(lambda  left,right: pd.merge(left,right,on=['Sample'],how='outer'), data_frames)
 	post_alignment_dat.columns = ['Sample', '%Mapping', '%Mismatch Rate', 'Mendelian Insert Size','%Q20', '%Q30', 'Median Coverage', 'PCT_1X', 'PCT_5X', 'PCT_10X','PCT_30X']
+	if args.hs_metrics:
+		post_alignment_dat.columns = ['Sample', '%Mapping', '%Mismatch Rate', 'Mendelian Insert Size','%Q20', '%Q30', 'Median Coverage', 'PCT_1X', 'PCT_5X', 'PCT_10X','PCT_20X','PCT_30X','Fold-80','On target bases rate']
 	post_alignment_dat = post_alignment_dat.round(2)
 	post_alignment_dat.to_csv('post_alignment.txt',sep="\t",index=0)
 	#########################################

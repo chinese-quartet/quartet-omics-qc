@@ -3,14 +3,14 @@ task merge_mendelian {
 	File D6_trio_vcf
 	File family_vcf
 	String family_name = basename(family_vcf, ".family.vcf")
-	
+
 	command <<<
 		cat ${D5_trio_vcf} | grep -v '##' > ${family_name}.D5.txt
 		cat ${D6_trio_vcf} | grep -v '##' > ${family_name}.D6.txt
 		cat ${family_vcf} | grep -v '##' | awk '
 		    BEGIN { OFS = "\t" }
-		    NF > 2 && FNR > 1 { 
-		        for ( i=9; i<=NF; i++ ) { 
+		    NF > 2 && FNR > 1 {
+		        for ( i=9; i<=NF; i++ ) {
 		            split($i,a,":") ;$i = a[1];
 		        } 
 		    } 

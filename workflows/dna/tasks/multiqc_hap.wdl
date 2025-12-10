@@ -1,6 +1,5 @@
 task multiqc_hap {
 	Array[File] summary
-	String project
 
 	command <<<
 		set -o pipefail
