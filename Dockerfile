@@ -75,6 +75,7 @@ RUN wget https://github.com/StevenWingett/FastQ-Screen/archive/refs/tags/v0.16.0
 RUN tar -zxvf v0.16.0.tar.gz
 
 RUN wget https://bitbucket.org/kokonech/qualimap/downloads/qualimap_v2.3.zip
+# COPY ./qualimap_v2.3.zip .
 RUN unzip qualimap_v2.3.zip
 
 RUN mkdir -p /opt/picard && \
@@ -191,11 +192,13 @@ RUN python3.10 -m venv venv && \
 COPY --from=builder /opt/bwa/bwa /usr/local/sbin
 COPY --from=builder /opt/samtools /opt/samtools
 COPY --from=builder /opt/FastQC /opt/FastQC
+# for fastq-screen
+RUN apt-get install -y libgd-dev libgd-graph-perl
 COPY --from=builder /opt/bowtie2-2.5.4-linux-x86_64 /opt/bowtie2
-COPY --from=builder /opt/FastQ-Screen-0.16.0/fastq_screen /usr/local/sbin
+COPY --from=builder /opt/FastQ-Screen-0.16.0 /opt/FastQ-Screen
 COPY --from=builder /opt/qualimap_v2.3 /opt/qualimap
 COPY --from=builder /opt/picard /opt/picard
-ENV PATH=/opt/qualimap:/opt/FastQC:/opt/bowtie2:/opt/samtools/bin:$PATH
+ENV PATH=/opt/qualimap:/opt/FastQ-Screen:/opt/FastQC:/opt/bowtie2:/opt/samtools/bin:$PATH
 
 RUN mkdir quartet
 COPY workflows /opt/quartet/workflows
