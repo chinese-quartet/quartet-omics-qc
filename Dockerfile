@@ -53,19 +53,6 @@ RUN cp /opt/htslib-1.22.1/libhts.so /opt/vbt/lib/
 RUN cp /opt/htslib-1.22.1/libhts.so.3 /opt/vbt/lib/
 RUN make all
 
-WORKDIR /opt
-RUN git clone -b v0.7.19 https://github.com/lh3/bwa.git
-WORKDIR /opt/bwa
-RUN make
-
-WORKDIR /opt
-RUN wget https://github.com/samtools/samtools/releases/download/1.22.1/samtools-1.22.1.tar.bz2
-RUN tar -xjvf samtools-1.22.1.tar.bz2
-WORKDIR /opt/samtools-1.22.1
-RUN ./configure --prefix=/opt/samtools
-RUN make
-RUN make install
-
 RUN apt-get install -y unzip
 WORKDIR /opt
 RUN wget https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.12.1.zip
@@ -74,8 +61,8 @@ RUN unzip fastqc_v0.12.1.zip
 RUN wget https://github.com/StevenWingett/FastQ-Screen/archive/refs/tags/v0.16.0.tar.gz
 RUN tar -zxvf v0.16.0.tar.gz
 
-RUN wget https://bitbucket.org/kokonech/qualimap/downloads/qualimap_v2.3.zip
-# COPY ./qualimap_v2.3.zip .
+# RUN wget https://bitbucket.org/kokonech/qualimap/downloads/qualimap_v2.3.zip
+COPY ./qualimap_v2.3.zip .
 RUN unzip qualimap_v2.3.zip
 
 RUN mkdir -p /opt/picard && \
@@ -86,7 +73,7 @@ RUN wget https://twds.dl.sourceforge.net/project/bowtie-bio/bowtie2/2.5.4/bowtie
 RUN unzip bowtie2-2.5.4-linux-x86_64.zip
 
 
-FROM google/deepvariant:1.9.0 AS runner
+FROM nvcr.io/nvidia/clara/clara-parabricks:4.6.0-1 AS runner
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -189,16 +176,16 @@ RUN apt-get install -y python3.10 python3.10-venv
 RUN python3.10 -m venv venv && \
     /opt/venv/bin/pip install multiqc==1.9
 
-COPY --from=builder /opt/bwa/bwa /usr/local/sbin
-COPY --from=builder /opt/samtools /opt/samtools
 COPY --from=builder /opt/FastQC /opt/FastQC
 # for fastq-screen
 RUN apt-get install -y libgd-dev libgd-graph-perl
 COPY --from=builder /opt/bowtie2-2.5.4-linux-x86_64 /opt/bowtie2
 COPY --from=builder /opt/FastQ-Screen-0.16.0 /opt/FastQ-Screen
 COPY --from=builder /opt/qualimap_v2.3 /opt/qualimap
+## Fix compatibility issue with jdk17
+RUN sed -i '42s/MaxPermSize/MaxMetaspaceSize/' /opt/qualimap/qualimap
 COPY --from=builder /opt/picard /opt/picard
-ENV PATH=/opt/qualimap:/opt/FastQ-Screen:/opt/FastQC:/opt/bowtie2:/opt/samtools/bin:$PATH
+ENV PATH=/opt/qualimap:/opt/FastQ-Screen:/opt/FastQC:/opt/bowtie2:$PATH
 
 RUN mkdir quartet
 COPY workflows /opt/quartet/workflows

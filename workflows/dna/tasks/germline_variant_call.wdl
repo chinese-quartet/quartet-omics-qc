@@ -10,19 +10,12 @@ task deepvariant {
 command <<<
 	set -o pipefail
 	set -e
-	type=WGS
-	if [ ${bed} ];then
-		type=WES
-	fi
 
-	/opt/deepvariant/bin/run_deepvariant \
-		--model_type=$type \
-		--ref=${grc_ref_fa} \
-		--reads=${recaled_bam} \
-		--regions=${region} \
-		--output_vcf=${sample}_hc.vcf \
-		--vcf_stats_report=true \
-		--num_shards=$(nproc) 
+	pbrun deepvariant \
+		--in-bam ${recaled_bam} \
+		--ref ${grc_ref_fa} \
+		--out-variants ${sample}_hc.vcf \
+		--interval-file ${region}
 	>>>
 
 	output {

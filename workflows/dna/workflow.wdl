@@ -85,23 +85,18 @@ workflow dseqc {
 			fastq_screen_config=fastq_screen_config,
 		}
 
-		call dedup.dedup as dedup_D5 {
-			input:
-			sorted_bam=mapping_D5.sorted_bam,
-		}
-
 		call qualimap.qualimap as qualimap_D5 {
 			input:
-			bam=dedup_D5.dedup_bam,
-			bai=dedup_D5.dedup_bam_index,
+			bam=mapping_D5.dedup_bam,
+			bai=mapping_D5.dedup_bam_index,
 			bed=bed,
 		}		
 
 		call deduped_metrics.deduped_metrics as deduped_metrics_D5 {
 			input:
 			grc_ref_fa=grc_ref_fa,
-			dedup_bam=dedup_D5.dedup_bam,
-			dedup_bam_index=dedup_D5.dedup_bam_index,
+			dedup_bam=mapping_D5.dedup_bam,
+			dedup_bam_index=mapping_D5.dedup_bam_index,
 			bed=bed,
 			grc_ref_dict=grc_ref_dict,
 		}
@@ -117,8 +112,8 @@ workflow dseqc {
 
 		call germline_variant_call.deepvariant as germline_variant_call_D5 {
 			input:
-			recaled_bam=dedup_D5.dedup_bam,
-			recaled_bam_index=dedup_D5.dedup_bam_index,
+			recaled_bam=mapping_D5.dedup_bam,
+			recaled_bam_index=mapping_D5.dedup_bam_index,
 			bed=bed,
 			grc_ref_fa=grc_ref_fa,
 			quartet_hc_region=quartet_hc_region,
@@ -175,23 +170,18 @@ workflow dseqc {
 			fastq_screen_config=fastq_screen_config,
 		}
 
-		call dedup.dedup as dedup_D6 {
-			input:
-			sorted_bam=mapping_D6.sorted_bam,
-		}
-
 		call qualimap.qualimap as qualimap_D6 {
 			input:
-			bam=dedup_D6.dedup_bam,
-			bai=dedup_D6.dedup_bam_index,
+			bam=mapping_D6.dedup_bam,
+			bai=mapping_D6.dedup_bam_index,
 			bed=bed,
 		}		
 
 		call deduped_metrics.deduped_metrics as deduped_metrics_D6 {
 			input:
 			grc_ref_fa=grc_ref_fa,
-			dedup_bam=dedup_D6.dedup_bam,
-			dedup_bam_index=dedup_D6.dedup_bam_index,
+			dedup_bam=mapping_D6.dedup_bam,
+			dedup_bam_index=mapping_D6.dedup_bam_index,
 			bed=bed,
 			grc_ref_dict=grc_ref_dict,
 		}
@@ -207,8 +197,8 @@ workflow dseqc {
 
 		call germline_variant_call.deepvariant as germline_variant_call_D6 {
 			input:
-			recaled_bam=dedup_D6.dedup_bam,
-			recaled_bam_index=dedup_D6.dedup_bam_index,
+			recaled_bam=mapping_D6.dedup_bam,
+			recaled_bam_index=mapping_D6.dedup_bam_index,
 			bed=bed,
 			grc_ref_fa=grc_ref_fa,
 			quartet_hc_region=quartet_hc_region,
@@ -264,23 +254,18 @@ workflow dseqc {
 			fastq_screen_config=fastq_screen_config,
 		}
 
-		call dedup.dedup as dedup_F7 {
-			input:
-			sorted_bam=mapping_F7.sorted_bam,
-		}
-
 		call qualimap.qualimap as qualimap_F7 {
 			input:
-			bam=dedup_F7.dedup_bam,
-			bai=dedup_F7.dedup_bam_index,
+			bam=mapping_F7.dedup_bam,
+			bai=mapping_F7.dedup_bam_index,
 			bed=bed,
 		}		
 
 		call deduped_metrics.deduped_metrics as deduped_metrics_F7 {
 			input:
 			grc_ref_fa=grc_ref_fa,
-			dedup_bam=dedup_F7.dedup_bam,
-			dedup_bam_index=dedup_F7.dedup_bam_index,
+			dedup_bam=mapping_F7.dedup_bam,
+			dedup_bam_index=mapping_F7.dedup_bam_index,
 			bed=bed,
 			grc_ref_dict=grc_ref_dict,
 		}
@@ -296,8 +281,8 @@ workflow dseqc {
 
 		call germline_variant_call.deepvariant as germline_variant_call_F7 {
 			input:
-			recaled_bam=dedup_F7.dedup_bam,
-			recaled_bam_index=dedup_F7.dedup_bam_index,
+			recaled_bam=mapping_F7.dedup_bam,
+			recaled_bam_index=mapping_F7.dedup_bam_index,
 			bed=bed,
 			grc_ref_fa=grc_ref_fa,
 			quartet_hc_region=quartet_hc_region,
@@ -353,23 +338,18 @@ workflow dseqc {
 			fastq_screen_config=fastq_screen_config,
 		}
 
-		call dedup.dedup as dedup_M8 {
-			input:
-			sorted_bam=mapping_M8.sorted_bam,
-		}
-
 		call qualimap.qualimap as qualimap_M8 {
 			input:
-			bam=dedup_M8.dedup_bam,
-			bai=dedup_M8.dedup_bam_index,
+			bam=mapping_M8.dedup_bam,
+			bai=mapping_M8.dedup_bam_index,
 			bed=bed,
 		}		
 
 		call deduped_metrics.deduped_metrics as deduped_metrics_M8 {
 			input:
 			grc_ref_fa=grc_ref_fa,
-			dedup_bam=dedup_M8.dedup_bam,
-			dedup_bam_index=dedup_M8.dedup_bam_index,
+			dedup_bam=mapping_M8.dedup_bam,
+			dedup_bam_index=mapping_M8.dedup_bam_index,
 			bed=bed,
 			grc_ref_dict=grc_ref_dict,
 		}
@@ -385,8 +365,8 @@ workflow dseqc {
 
 		call germline_variant_call.deepvariant as germline_variant_call_M8 {
 			input:
-			recaled_bam=dedup_M8.dedup_bam,
-			recaled_bam_index=dedup_M8.dedup_bam_index,
+			recaled_bam=mapping_M8.dedup_bam,
+			recaled_bam_index=mapping_M8.dedup_bam_index,
 			bed=bed,
 			grc_ref_fa=grc_ref_fa,
 			quartet_hc_region=quartet_hc_region,
