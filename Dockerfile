@@ -197,6 +197,8 @@ RUN apt-get install -y libgd-dev libgd-graph-perl
 COPY --from=builder /opt/bowtie2-2.5.4-linux-x86_64 /opt/bowtie2
 COPY --from=builder /opt/FastQ-Screen-0.16.0 /opt/FastQ-Screen
 COPY --from=builder /opt/qualimap_v2.3 /opt/qualimap
+## Fix compatibility issue with jdk17
+RUN sed -i '42s/MaxPermSize/MaxMetaspaceSize/' /opt/qualimap/qualimap
 COPY --from=builder /opt/picard /opt/picard
 ENV PATH=/opt/qualimap:/opt/FastQ-Screen:/opt/FastQC:/opt/bowtie2:/opt/samtools/bin:$PATH
 
