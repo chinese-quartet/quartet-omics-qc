@@ -171,9 +171,11 @@ RUN R -e "remotes::install_github('chinese-quartet/Quartet-Protein-QC/protqc', r
 
 RUN R -e "remotes::install_github('chinese-quartet/Quartet-Metabolism-QC-Report/metqc', ref='main')"
 
-RUN apt-get install -y python3.10 python3.10-venv
+RUN add-apt-repository -y ppa:deadsnakes/ppa && \
+    apt-get install -y python3.9 python3.9-venv
 # multiqc needs to be 1.9 for the DNA workflow compatibility
-RUN python3.10 -m venv venv && \
+# and it would only support python version up to 3.9
+RUN python3.9 -m venv venv && \
     /opt/venv/bin/pip install multiqc==1.9
 
 COPY --from=builder /opt/FastQC /opt/FastQC
