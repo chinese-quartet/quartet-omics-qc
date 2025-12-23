@@ -12,9 +12,9 @@ task extract_tables {
 
 	command <<<
         if [ ${hs_metrics_summary} ];then
-		    python /opt/quartet/scripts/extract_tables.py -quality ${quality_yield_metrics_summary} -depth ${wgs_metrics_summary} -aln ${aln_metrics_summary} -is ${is_metrics_summary} -fastqc ${fastqc} -fastqscreen ${fastqscreen} -hap ${hap} -project ${project} -hs ${hs_metrics_summary}
+		    python2 /opt/quartet/scripts/extract_tables.py -quality ${quality_yield_metrics_summary} -depth ${wgs_metrics_summary} -aln ${aln_metrics_summary} -is ${is_metrics_summary} -fastqc ${fastqc} -fastqscreen ${fastqscreen} -hap ${hap} -project ${project} -hs ${hs_metrics_summary}
         else
-            python /opt/quartet/scripts/extract_tables.py -quality ${quality_yield_metrics_summary} -depth ${wgs_metrics_summary} -aln ${aln_metrics_summary} -is ${is_metrics_summary} -fastqc ${fastqc} -fastqscreen ${fastqscreen} -hap ${hap} -project ${project}
+            python2 /opt/quartet/scripts/extract_tables.py -quality ${quality_yield_metrics_summary} -depth ${wgs_metrics_summary} -aln ${aln_metrics_summary} -is ${is_metrics_summary} -fastqc ${fastqc} -fastqscreen ${fastqscreen} -hap ${hap} -project ${project}
         fi
 	>>>
 
