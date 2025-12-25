@@ -11,7 +11,7 @@ type <- args[3]
 report_dir <- args[4]
 report_name <- args[5]
 
-if(variant_qc == "null") {
+if(mendelian_qc == "null") {
   result <- dnaseqc(variant_qc_file = variant_qc, data_type = type)
 } else {
   result <- dnaseqc(variant_qc_file = variant_qc, data_type = type, mendelian_qc_file = mendelian_qc)

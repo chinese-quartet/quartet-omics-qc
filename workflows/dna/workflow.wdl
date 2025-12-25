@@ -628,7 +628,7 @@ workflow dseqc {
 	call generate_qc_report.generate_qc_report as generate_qc_report {
 		input:
 		variant_qc=select_first([extract_tables.variant_calling, extract_tables_vcf.variant_calling]),
-		mendelian_qc=select_first([merge_mendelian_vcf.project_mendelian_summary, "null"]),
+		mendelian_qc=merge_mendelian_vcf.project_mendelian_summary,
 		output_dir=output_dir,
 		report_name=report_name,
 	}
