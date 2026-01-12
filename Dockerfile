@@ -170,19 +170,19 @@ RUN apt install -y --no-install-recommends \
     pkg-config
 
 RUN R -e "install.packages('remotes')"
-RUN R -e "remotes::install_github('vangork/Quartet-DNA-QC-report/dnaseqc', ref='dev')"
+RUN R -e "remotes::install_github('chinese-quartet/Quartet-DNA-QC-report/dnaseqc', ref='v1.1')"
 
-RUN R -e "install.packages('edgeR', repos = c('https://bioc.r-universe.dev', 'https://cloud.r-project.org'))"
-RUN R -e "install.packages('BiocManager')"
-RUN R -e "BiocManager::install('limma')"
-RUN R -e "remotes::install_github('vangork/Quartet-RNA-QC-report/exp2qcdt', ref='dev')"
+RUN R -e "install.packages('edgeR', repos = c('https://bioc.r-universe.dev', 'https://cloud.r-project.org'))" && \
+    R -e "install.packages('BiocManager')" && \
+    R -e "BiocManager::install('limma')" && \
+    R -e "remotes::install_github('chinese-quartet/Quartet-RNA-QC-report/exp2qcdt', ref='v1.1-update')"
 
-RUN R -e "remotes::install_github('vangork/Quartet-Protein-QC/protqc', ref='dev')"
+RUN R -e "remotes::install_github('chinese-quartet/Quartet-Protein-QC/protqc', ref='v1.1')"
 
-RUN R -e "remotes::install_github('vangork/Quartet-Metabolism-QC-Report/metqc', ref='dev')"
+RUN R -e "remotes::install_github('chinese-quartet/Quartet-Metabolism-QC-Report/metqc', ref='v1.1')"
 
-RUN apt-get install -y python3.8 python3.8-venv
-RUN python3.8 -m venv venv && \
+RUN apt-get install -y python3.9 python3.9-venv
+RUN python3.9 -m venv venv && \
     /opt/venv/bin/pip install multiqc==1.9
 
 RUN mkdir quartet
@@ -191,4 +191,5 @@ RUN cd /opt/quartet/workflows/dna/ && \
     zip -r tasks.zip tasks/
 COPY scripts /opt/quartet/scripts
 COPY omics_qc.py /opt/quartet/omics_qc.py
+
 ENTRYPOINT ["/opt/quartet/omics_qc.py"]

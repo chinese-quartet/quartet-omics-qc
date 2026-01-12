@@ -3,7 +3,7 @@ task extract_tables_vcf {
 	String project
 
 	command <<<
-		python /opt/quartet/scripts/extract_tables.py -hap ${hap} -project ${project}
+		python2 /opt/quartet/scripts/extract_tables.py -hap ${hap} -project ${project}
 	>>>
 
 	output {
