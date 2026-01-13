@@ -170,14 +170,14 @@ RUN apt install -y --no-install-recommends \
     pkg-config
 
 RUN R -e "install.packages('remotes')"
-RUN R -e "remotes::install_github('chinese-quartet/Quartet-DNA-QC-report/dnaseqc', ref='v1.1')"
+RUN R -e "remotes::install_github('chinese-quartet/Quartet-DNA-QC-report/dnaseqc', ref='68985009a8173ab50823de948fc050c31abc4e94')"
 
 RUN R -e "install.packages('edgeR', repos = c('https://bioc.r-universe.dev', 'https://cloud.r-project.org'))" && \
     R -e "install.packages('BiocManager')" && \
     R -e "BiocManager::install('limma')" && \
     R -e "remotes::install_github('chinese-quartet/Quartet-RNA-QC-report/exp2qcdt', ref='v1.1-update')"
 
-RUN R -e "remotes::install_github('chinese-quartet/Quartet-Protein-QC/protqc', ref='v1.1')"
+RUN R -e "remotes::install_github('chinese-quartet/Quartet-Protein-QC/protqc', ref='cb38379fa7d8ddc93fd57bd7b06acaf3207b03a6')"
 
 RUN R -e "remotes::install_github('chinese-quartet/Quartet-Metabolism-QC-Report/metqc', ref='v1.1')"
 
