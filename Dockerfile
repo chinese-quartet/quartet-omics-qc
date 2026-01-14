@@ -181,6 +181,8 @@ RUN R -e "remotes::install_github('chinese-quartet/Quartet-Protein-QC/protqc', r
 
 RUN R -e "remotes::install_github('chinese-quartet/Quartet-Metabolism-QC-Report/metqc', ref='v1.1')"
 
+RUN R -e "remotes::install_github('vangork/Plasmix_Protein_QC_Report/PlasmixProtQC', ref='74bb86401ab0edd26a60d73babadc357253b3c5e')"
+
 RUN apt-get install -y python3.9 python3.9-venv
 RUN python3.9 -m venv venv && \
     /opt/venv/bin/pip install multiqc==1.9
