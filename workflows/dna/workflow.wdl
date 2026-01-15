@@ -26,6 +26,7 @@ workflow dseqc {
 
 	String output_dir
 	String report_name
+	String? qc_file
 	String project
 
 	# Fastq is null, check if starts with vcf
@@ -146,6 +147,8 @@ workflow dseqc {
 		input:
 		hap=multiqc_hap.hap,
 		project=project,
+		output_dir=output_dir,
+		qc_file=qc_file,
 	}
 
 	if (defined(vcf_D5) && defined(vcf_D6) && defined(vcf_F7) && defined(vcf_M8)) {
