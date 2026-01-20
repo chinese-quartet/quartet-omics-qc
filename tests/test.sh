@@ -10,4 +10,5 @@ docker run --rm -v ./:/src -w /src --entrypoint Rscript ${IMAGE_NAME} /src/tests
 docker run --rm -v ./:/src -w /src --entrypoint Rscript ${IMAGE_NAME} /src/tests/test_protein.R
 docker run --rm -v ./:/src -w /src --entrypoint Rscript ${IMAGE_NAME} /src/tests/test_metabolism.R
 docker run --rm -v ./:/src -w /src --entrypoint Rscript ${IMAGE_NAME} /src/tests/test_plasmix_protein.R
+docker run --rm -v ./:/src -w /src --entrypoint Rscript ${IMAGE_NAME} /src/tests/test_plasmix_metabolism.R
 popd
