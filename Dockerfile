@@ -175,13 +175,13 @@ RUN R -e "remotes::install_github('chinese-quartet/Quartet-DNA-QC-report/dnaseqc
 RUN R -e "install.packages('edgeR', repos = c('https://bioc.r-universe.dev', 'https://cloud.r-project.org'))" && \
     R -e "install.packages('BiocManager')" && \
     R -e "BiocManager::install('limma')" && \
-    R -e "remotes::install_github('chinese-quartet/Quartet-RNA-QC-report/exp2qcdt', ref='9ef1a52e5fc5556d4f2cd8f2591bcfb901d6acd7')"
+    R -e "remotes::install_github('chinese-quartet/Quartet-RNA-QC-report/exp2qcdt', ref='351b0c661a5d35cf7098ce3abd82b6a333174a28')"
 
-RUN R -e "remotes::install_github('chinese-quartet/Quartet-Protein-QC/protqc', ref='69f7a2ab7d812e172ac46eb39a05b36812a5e4f6')"
+RUN R -e "remotes::install_github('chinese-quartet/Quartet-Protein-QC/protqc', ref='af4bd8bce8ad8ee7e528efeebb6812519e4119ce')"
 
-RUN R -e "remotes::install_github('chinese-quartet/Quartet-Metabolism-QC-Report/metqc', ref='8b0a8e76160db45436a32d2d14a5c8761287f6e6')"
+RUN R -e "remotes::install_github('chinese-quartet/Quartet-Metabolism-QC-Report/metqc', ref='5ed3ceed713ff10cb1426305fdbcdc899180aa0f')"
 
-RUN R -e "remotes::install_github('vangork/Plasmix_Protein_QC_Report/PlasmixProtQC', ref='c59586a532e32680380f25a8652ee9a5fe109114')"
+RUN R -e "remotes::install_github('vangork/Plasmix_Protein_QC_Report/PlasmixProtQC', ref='41d6a3eb69f3fa66d750fe98d27cebbba7333f18')"
 
 RUN R -e "remotes::install_github('vangork/Plasmix_Metabolite_QC_Report/PlasmixMetQC', ref='b2400ae2b839044dec82804c3e120938afdf14d6')"
 
