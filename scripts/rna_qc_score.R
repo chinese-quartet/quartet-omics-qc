@@ -12,7 +12,7 @@ report_dir <- args[4]
 report_name <- args[5]
 
 # 2. 运行核心函数
-result <- exp2qcdt(
+qc_result <- exp2qcdt(
   exp_table_file = exp_file,
   count_table_file = count_file,
   phenotype_file = meta_file
