@@ -82,8 +82,8 @@ if args.quality_yield:
 	dat = dat.loc[:, dat.columns.str.endswith('ALL')]
 	dat_transposed = dat.T
 	dat_transposed = dat_transposed.loc[:,['sample_id','QUERY.TOTAL','METRIC.Precision','METRIC.Recall']]
-	indel = dat_transposed[['INDEL' in s for s in dat_transposed.index]]
-	snv = dat_transposed[['SNP' in s for s in dat_transposed.index]]
+	indel = dat_transposed[['INDEL_ALL' in s for s in dat_transposed.index]]
+	snv = dat_transposed[['SNP_ALL' in s for s in dat_transposed.index]]
 	indel.reset_index(drop=True, inplace=True)
 	snv.reset_index(drop=True, inplace=True)
 	benchmark = pd.concat([snv, indel], axis=1)
@@ -108,8 +108,8 @@ else:
 	dat = dat.loc[:, dat.columns.str.endswith('ALL')]
 	dat_transposed = dat.T
 	dat_transposed = dat_transposed.loc[:,['sample_id','QUERY.TOTAL','METRIC.Precision','METRIC.Recall']]
-	indel = dat_transposed[['INDEL' in s for s in dat_transposed.index]]
-	snv = dat_transposed[['SNP' in s for s in dat_transposed.index]]
+	indel = dat_transposed[['INDEL_ALL' in s for s in dat_transposed.index]]
+	snv = dat_transposed[['SNP_ALL' in s for s in dat_transposed.index]]
 	indel.reset_index(drop=True, inplace=True)
 	snv.reset_index(drop=True, inplace=True)
 	benchmark = pd.concat([snv, indel], axis=1)
