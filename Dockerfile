@@ -181,9 +181,9 @@ RUN R -e "remotes::install_github('chinese-quartet/Quartet-Protein-QC/protqc', r
 
 RUN R -e "remotes::install_github('chinese-quartet/Quartet-Metabolism-QC-Report/metqc', ref='5ed3ceed713ff10cb1426305fdbcdc899180aa0f')"
 
-RUN R -e "remotes::install_github('vangork/Plasmix_Protein_QC_Report/PlasmixProtQC', ref='18a18e285848c1a0be83bba96078e32fa5fcf957')"
+RUN R -e "remotes::install_github('chinese-quartet/Plasmix-Protein-QC-Report/PlasmixProtQC', ref='18a18e285848c1a0be83bba96078e32fa5fcf957')"
 
-RUN R -e "remotes::install_github('vangork/Plasmix_Metabolite_QC_Report/PlasmixMetQC', ref='b2400ae2b839044dec82804c3e120938afdf14d6')"
+RUN R -e "remotes::install_github('chinese-quartet/Plasmix-Metabolite-QC-Report/PlasmixMetQC', ref='5f0bf8bd9c5510050eacbd9cd857b2694a1c4837')"
 
 RUN apt-get install -y python3.9 python3.9-venv
 RUN python3.9 -m venv venv && \
