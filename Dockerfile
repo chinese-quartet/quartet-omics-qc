@@ -189,11 +189,18 @@ RUN apt-get install -y python3.9 python3.9-venv
 RUN python3.9 -m venv venv && \
     /opt/venv/bin/pip install multiqc==1.9
 
+COPY quartet-dseqc-report-reference-data/reference_datasets_v202103 /opt/quartet-dseqc-report-reference-data/reference_datasets_v202103
+COPY quartet-dseqc-report-reference-data/GRCh38.d1.vd1/GRCh38.d1.vd1.fa /opt/quartet-dseqc-report-reference-data/GRCh38.d1.vd1/GRCh38.d1.vd1.fa
+COPY quartet-dseqc-report-reference-data/GRCh38.d1.vd1/GRCh38.d1.vd1.fa.fai /opt/quartet-dseqc-report-reference-data/GRCh38.d1.vd1/GRCh38.d1.vd1.fa.fai
+
 RUN mkdir quartet
 COPY workflows /opt/quartet/workflows
 RUN cd /opt/quartet/workflows/dna/ && \
     zip -r tasks.zip tasks/
 COPY scripts /opt/quartet/scripts
 COPY omics_qc.py /opt/quartet/omics_qc.py
+
+RUN /opt/venv/bin/pip install oss2 flask requests
+COPY fc.py /opt/fc.py
 
 ENTRYPOINT ["/opt/quartet/omics_qc.py"]
