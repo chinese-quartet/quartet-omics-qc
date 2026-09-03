@@ -4,7 +4,6 @@ from flask import Flask
 from flask import request
 import json
 import os
-import oss2
 import requests
 from subprocess import Popen, PIPE
 import time
@@ -174,6 +173,7 @@ def hello_world(path):
             "indel_precision": float(indel_precision),
             "snv_recall": float(snv_recall),
             "indel_recall": float(indel_recall),
+            "from": dim,
         }
         response = s.put(f'{url}/api/admin/omics/quartet/dna/{dii}/score', json=score_payload)
         response_json = response.json()

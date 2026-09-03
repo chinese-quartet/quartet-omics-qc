@@ -70,6 +70,9 @@ RUN mkdir cromwell && \
     wget http://e-hpc-hangzhou.oss-cn-hangzhou.aliyuncs.com/softwares/ehpc-public-data/cromwell/cromwell-81-latest.jar -O cromwell.jar
 COPY ./cromwell.conf /opt/cromwell/cromwell.conf
 
+RUN /opt/venv/bin/pip install flask requests
+COPY fc.py /opt/fc.py
+
 RUN mkdir quartet
 
 COPY scripts /opt/quartet/scripts

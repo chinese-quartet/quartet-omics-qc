@@ -24,10 +24,10 @@ task fastp {
         fastp \
             -i "$local_work/read1.fq.gz" \
             -I "$local_work/read2.fq.gz" \
-            -o "$local_work/quartet_r1.clean.fastq.gz" \
-            -O "$local_work/quartet_r2.clean.fastq.gz" \
-            -j "$local_work/fastp.json" \
-            -h "$local_work/fastp.html" \
+            -o "$local_work/quartet_R1.clean.fastq.gz" \
+            -O "$local_work/quartet_R2.clean.fastq.gz" \
+            -j "$local_work/quartet.json" \
+            -h "$local_work/quartet.html" \
             --thread $nt
         
         cp -f "$local_work/quartet_R1.clean.fastq.gz" quartet_R1.clean.fastq.gz
