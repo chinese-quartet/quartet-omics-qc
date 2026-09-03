@@ -1,4 +1,9 @@
 qualimap*.zip
 gpu.tar
 quartet-dseqc-report-reference-data/
-output/
+output*/
+cromwell-workflow-logs/
+cromwell-*.jar
+cromwell-local.conf
+inputs.json
+options.json

@@ -4,30 +4,6 @@ This repo would evaluate and generate the multi-omics QC result with Quartet ref
 
 ## Usage
 
-### DNA QC
-1. Download the reference dataset zip file from https://zenodo.org/record/7800049/files/quartet-dseqc-report-reference-data-v20230404.zip?download=1
-2. Unzip to get the folder of "quartet-dseqc-report" containing reference dataset raw files
-3. Create a new folder. e.g. ~/dna_qc with a subfolder for the QC report, e.g. ~/dna_qc/report
-4. Move the vcf files and "quartet-dseqc-report" folder to new created folder
-5. Run the following command to evaluate the vcf files and the according QC report will be generated in the report folder prefixed with "Quartet_DNA_Report"
-```
-docker run -d -v ~/dna_qc:/data -it ghcr.io/chinese-quartet/quartet-omics-qc:latest dna-vcf-workflow --vcf-d5 /data/[d5_vcf].vcf --vcf-d6 /data/[d6_vcf].vcf --vcf-f7 /data/[f7_vcf].vcf --vcf-m8 /data/[m8_vcf].vcf -R /data/quartet-dseqc-report --output-dir /data/report
-```
-
-**PS:** param of `--vcf-d5`, `--vcf-d6`, `--vcf-f7`, `--vc-m8` can be specified multiple times. e.g.
-- --vcf-d5 [d5_vcf].vcf --vcf-d6 [d6_vcf].vcf --vcf-f7 [f7_vcf].vcf --vcf-m8 [m8_vcf].vcf
-    
-    It would generate one report including mendelian concordance rate score(MCR)
-
-- --vcf-d5 [d5_vcf].vcf
-    
-    It would generate one report without MCR calculation but with SNV and INDEL score only
-
-- --vcf-d5 [d5_vcf].vcf --vcf-d6 [d6_vcf].vcf --vcf-f7 [f7_vcf].vcf --vcf-m8 [m8_vcf].vcf, --vcf-d5 [d5_vcf_1].vcf, --vcf-d6 [d6_vcf_1].vcf
-    
-    It would generate two reports, the first report would include the MCR calculation for the first four vcf files. And the second report would only have the SNV and INDEL score for the d5 and d6 vcf files
-
-
 ### RNA QC
 1. Create a new folder. e.g. ~/rna_qc with a subfolder for the QC report, e.g. ~/rna_qc/report
 2. Put the RNA expresssion table, count table and phenotype file to the new created folder
